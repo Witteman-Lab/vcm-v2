@@ -1,8 +1,12 @@
 <template>
     <div id="app" class="container">
+      <navigation
+      :labels="labels"
+      @langswitch="switchLanguage"
+      ></navigation>
         <!--Instructions -->
         <div id="descriptionTitle" class="column is-centered">
-            <h1 id="title" class="title has-text-primary is-size-5-mobile is-size-3-desktop">{{this.labels.title}}</h1>
+          <h1 id="title" class="title has-text-primary is-size-5-mobile is-size-3-desktop">{{this.labels.title}}</h1>
             <!-- <button v-if="!selectedLanguage" id="selectLanguage" class="button" v-on:click="this.changeLanguage">{{this.labels.language}}</button> -->
             <button id="collapsible" class="button is-primary collapsible"  v-on:click="activeInstruction">{{this.instruction[instructionToggle]}}</button>
             <p id="description" class="notification has-text-left has-background-white">
@@ -51,14 +55,16 @@ import textEn from "./assets/json/textEn.json";
 import textFr from "./assets/json/textFr.json";
 import config from "./assets/json/config.json";
 import VerticalProgressBar from "./components/VerticalProgressBar";
+import Navigation from "./components/Navigation.vue";
 
 
 export default {
     name: 'app',
-    components: {VerticalProgressBar, SliderRange},
+    components: {VerticalProgressBar, SliderRange,Navigation},
     data() {
         return {
-            isLanguageChanged: true,
+            labels: {},
+           isLanguageChanged: true,
             currentLanguage: "",
             progressValues: [],
             numberOfSlider: 0,
@@ -70,14 +76,35 @@ export default {
             topSliderLabel: "",
             optionGraphLabel: [],
             borderText: [],
-            textBold: []
+            textBold: [],
+            language: false,
+
         };
     },
     props:{
-        selectedLanguage: String
+        selectedLanguage: String,
+
     },
     methods: {
 
+
+      /**
+       * ---> Switches between languages
+       * @return none
+       */
+      switchLanguage() {
+        if (this.currentLanguage === 'fr') {
+          this.labels = textEn;
+          this.currentLanguage = 'en';
+          this.language = true;
+          localStorage.setItem('language', 'en');
+        } else {
+          this.labels = textFr;
+          this.language = false;
+          this.currentLanguage = 'fr';
+          localStorage.setItem('language', 'fr');
+        }
+      },
 
       /**
        * ---> This method prevent paste style on html
@@ -355,80 +382,94 @@ export default {
 <style lang="scss" >
 @import "./scss/mediaQuery.scss";
 
-#app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: left;
-    padding: 10px;
+.labels {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 
 }
+.languageBtn {
+  border: solid;
+  /* border-radius: 35px 35px 35px 35px; */
+   transition: 0.3s;
+   height: 30px;
+   width: 150px;
+ }
+ #app {
+     font-family: 'Avenir', Helvetica, Arial, sans-serif;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+     text-align: left;
+     padding: 10px;
 
-@keyframes collapsible {
-    0%{opacity:1;}
-    50%{opacity:0.25;}
-    100%{opacity:1;}
-}
+ }
 
-.space_between_slider {
-    margin-bottom: 10px;
-}
+ @keyframes collapsible {
+     0%{opacity:1;}
+     50%{opacity:0.25;}
+     100%{opacity:1;}
+ }
 
-.space_between_progress {
-    display: flex;
-    justify-content: center;
-    width: 30%;
-}
+ .space_between_slider {
+     margin-bottom: 10px;
+ }
 
-#result{
-    visibility: hidden;
-}
+ .space_between_progress {
+     display: flex;
+     justify-content: center;
+     width: 30%;
+ }
 
-h1#title{
-    font-size:1.4em;
-    margin: 0 0 12px;
-}
+ #result{
+     visibility: hidden;
+ }
 
-#scaleLeft {
-    float: left;
-    margin-left: 5px;
-    text-align: left;
-}
+ h1#title{
+     font-size:1.4em;
+     margin: 0 0 12px;
+ }
 
-#scaleRight {
-    float: right;
-    margin-right: 5px;
-    text-align: right;
-}
+ #scaleLeft {
+     float: left;
+     margin-left: 5px;
+     text-align: left;
+ }
 
-.collapsible {
-    width: auto;
-    margin: 0 0 10px 10px;
-    font-weight: bold;
-}
+ #scaleRight {
+     float: right;
+     margin-right: 5px;
+     text-align: right;
+ }
 
-#description {
-    display: none;
-    overflow: hidden;
-    line-height: 1.5;
-    padding: 0;
-}
+ .collapsible {
+     width: auto;
+     margin: 0 0 10px 10px;
+     font-weight: bold;
+ }
 
-p#options {
-    padding: 2px;
-    border: 1px solid;
-}
-#descriptionTitle{
-    width: 50%;
-}
+ #description {
+     display: none;
+     overflow: hidden;
+     line-height: 1.5;
+     padding: 0;
+ }
 
-.editableText, .editableTextStyle {
-    border: 1px dashed #666;
-    padding: 2px;
-    pointer: copy;
-}
+ p#options {
+     padding: 2px;
+     border: 1px solid;
+ }
+ #descriptionTitle{
+     width: 50%;
+ }
 
-/*for tablet and laptop devices*/
+ .editableText, .editableTextStyle {
+     border: 1px dashed #666;
+     padding: 2px;
+     pointer: copy;
+ }
+
+ /*for tablet and laptop devices*/
 @media only screen
 and (min-width: $breakpoint-tablet){
     button#collapsible{
