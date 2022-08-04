@@ -1,9 +1,13 @@
 {
+
+  "color" : {
+    "primaryColors": "#008363"
+  },
   "lineHeight":30,
   "min": 0,
   "max": 100,
   "processSliderColor" : [
-       "#410e73", "#a8a873"
+       "#410e73", "#a8a873",   "#008363"
   ],
   "backgroundDivColor" : [
     "#e6e5ff", "#f1f4b6"
