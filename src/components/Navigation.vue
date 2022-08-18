@@ -35,9 +35,9 @@ export default {
 }
 .languageBtn {
   border: solid;
-  /* border-radius: 35px 35px 35px 35px; */
+  border-radius: 35px 35px 35px 35px;
   transition: 0.3s;
-  height: 30px;
-  width: 150px;
+  background-color: #008363;
+  color: #eeeeee;
 }
 </style>
